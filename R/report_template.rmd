@@ -1,0 +1,51 @@
+---
+title: "report"
+output: html_document
+date: "`r Sys.Date()`"
+---
+```{r setup, include=FALSE}
+## install/load packages
+pkg_list <- c("purrr", "readxl", "kableExtra", "tidyverse", "summarytools", "gtsummary", "glmnet", "caret", "readr")
+for (pkg in pkg_list) {
+    if (!require(pkg, character.only = TRUE)) {
+        install.packages(pkg)
+    }
+    library(pkg, character.only = TRUE)
+}
+
+
+## set knitr working directory to parent
+## Run this only when being knitted
+if (isTRUE(getOption("knitr.in.progress"))) {
+    current_dir <- getwd()
+    setwd(dirname(current_dir))
+    knitr::opts_knit$set(root.dir = dirname(current_dir))
+    knitr::opts_chunk$set(echo = FALSE)
+    knitr::opts_chunk$set(warning = FALSE)
+    summarytools::st_options(
+        dfSummary.style = "multiline"
+    )
+    knitting <- TRUE
+} else {
+    summarytools::st_options(
+        dfSummary.style = "grid"
+    )
+    knitting <- FALSE
+}
+
+```
+
+```{r, include=FALSE}
+summaryEX <- function(df) {
+    if (knitting) {
+        dfSummary(df) |> print(method = "render")
+    } else {
+        dfSummary(df) |> view()
+    }
+}
+```
+
+```{r, include=FALSE, error=FALSE}
+# mydata <- read_delim("data.csv", delim = ";")
+# mydata <- read_xlsx("data.xlsx")
+```
